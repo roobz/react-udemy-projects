@@ -55,7 +55,7 @@
   "dependencies": {
     "@babel/code-frame": "7.10.4",
     "address": "1.1.2",
-    "browserslist": "4.13.0",
+    "browserslist": "^4.21.0",
     "chalk": "2.4.2",
     "cross-spawn": "7.0.3",
     "detect-port-alt": "1.1.6",
@@ -66,7 +66,7 @@
     "global-modules": "2.0.0",
     "globby": "11.0.1",
     "gzip-size": "5.1.1",
-    "immer": "7.0.5",
+    "immer": "^9.0.15",
     "inquirer": "7.3.2",
     "is-root": "2.1.0",
     "loader-utils": "2.0.0",
@@ -74,7 +74,7 @@
     "pkg-up": "3.1.0",
     "react-error-overlay": "^6.0.7",
     "recursive-readdir": "2.2.2",
-    "shell-quote": "1.7.2",
+    "shell-quote": "^1.7.3",
     "strip-ansi": "6.0.0",
     "text-table": "0.2.0"
   },
