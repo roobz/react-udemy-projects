@@ -69,6 +69,14 @@ if [ "$AGENT_OS" == 'Windows_NT' ]; then
   root_path=$(cmd //c cd)
 fi
 
+if hash npm 2>/dev/null
+then
+  npm i -g npm@latest
+fi
+
+# Bootstrap monorepo
+yarn
+
 # ******************************************************************************
 # First, publish the monorepo.
 # ******************************************************************************
@@ -89,7 +97,7 @@ npx create-react-app test-kitchensink --template=file:"$root_path"/packages/reac
 
 # Install the test module
 cd "$temp_module_path"
-npm install test-integrity@^2.0.1
+yarn add test-integrity@^2.0.1
 
 # ******************************************************************************
 # Now that we used create-react-app to create an app depending on react-scripts,
@@ -102,10 +110,13 @@ cd "$temp_app_path/test-kitchensink"
 # In kitchensink, we want to test all transforms
 export BROWSERSLIST='ie 9'
 
+# Link to test module
+npm link "$temp_module_path/node_modules/test-integrity"
+
 # Test the build
 REACT_APP_SHELL_ENV_MESSAGE=fromtheshell \
   PUBLIC_URL=http://www.example.org/spa/ \
-  npm run build
+  yarn build
 
 # Check for expected output
 exists build/*.html
@@ -116,14 +127,14 @@ exists build/static/js/main.*.js
 REACT_APP_SHELL_ENV_MESSAGE=fromtheshell \
   CI=true \
   NODE_ENV=test \
-  npm test --no-cache --runInBand --testPathPattern=src
+  yarn test --no-cache --runInBand --testPathPattern=src
 
 # Prepare "development" environment
 tmp_server_log=`mktemp`
 PORT=3001 \
   REACT_APP_SHELL_ENV_MESSAGE=fromtheshell \
   NODE_PATH=src \
-  nohup npm start &>$tmp_server_log &
+  nohup yarn start &>$tmp_server_log &
 grep -q 'You can now view' <(tail -f $tmp_server_log)
 
 # Test "development" environment

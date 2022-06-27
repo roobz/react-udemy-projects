@@ -1,5 +1,3 @@
-'use strict';
-
 const testSetup = require('../__shared__/test-setup');
 
 test('passes tests', async () => {

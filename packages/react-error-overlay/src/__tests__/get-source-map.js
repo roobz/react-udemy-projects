@@ -3,8 +3,6 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * @jest-environment jsdom
  */
 
 import { getSourceMap } from '../utils/getSourceMap';
@@ -54,14 +52,12 @@ test('error on a source map with unsupported encoding', async () => {
   const file = fs
     .readFileSync(resolve(__dirname, '../../fixtures/junk-inline.mjs'))
     .toString('utf8');
-  let error;
   try {
     await getSourceMap('/', file);
   } catch (e) {
-    error = e;
+    expect(e instanceof Error).toBe(true);
+    expect(e.message).toBe(
+      'Sorry, non-base64 inline source-map encoding is not supported.'
+    );
   }
-  expect(error instanceof Error).toBe(true);
-  expect(error.message).toBe(
-    'Sorry, non-base64 inline source-map encoding is not supported.'
-  );
 });

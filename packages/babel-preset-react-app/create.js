@@ -95,8 +95,7 @@ module.exports = function (api, opts, env) {
           development: isEnvDevelopment || isEnvTest,
           // Will use the native built-in instead of trying to polyfill
           // behavior for any plugins that require one.
-          ...(opts.runtime !== 'automatic' ? { useBuiltIns: true } : {}),
-          runtime: opts.runtime || 'classic',
+          useBuiltIns: true,
         },
       ],
       isTypeScriptEnabled && [require('@babel/preset-typescript').default],
@@ -146,26 +145,8 @@ module.exports = function (api, opts, env) {
       // class { handleClick = () => { } }
       // Enable loose mode to use assignment instead of defineProperty
       // See discussion in https://github.com/facebook/create-react-app/issues/4263
-      // Note:
-      // 'loose' mode configuration must be the same for
-      // * @babel/plugin-proposal-class-properties
-      // * @babel/plugin-proposal-private-methods
-      // * @babel/plugin-proposal-private-property-in-object
-      // (when they are enabled)
       [
         require('@babel/plugin-proposal-class-properties').default,
-        {
-          loose: true,
-        },
-      ],
-      [
-        require('@babel/plugin-proposal-private-methods').default,
-        {
-          loose: true,
-        },
-      ],
-      [
-        require('@babel/plugin-proposal-private-property-in-object').default,
         {
           loose: true,
         },

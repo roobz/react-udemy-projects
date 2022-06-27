@@ -14,22 +14,8 @@ const resolve = require('resolve');
 const path = require('path');
 const paths = require('../../config/paths');
 const os = require('os');
-const semver = require('semver');
 const immer = require('react-dev-utils/immer').produce;
 const globby = require('react-dev-utils/globby').sync;
-
-const hasJsxRuntime = (() => {
-  if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
-    return false;
-  }
-
-  try {
-    require.resolve('react/jsx-runtime', { paths: [paths.appPath] });
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
 
 function writeJson(fileName, object) {
   fs.writeFileSync(
@@ -146,15 +132,8 @@ function verifyTypeScriptSetup() {
     isolatedModules: { value: true, reason: 'implementation limitation' },
     noEmit: { value: true },
     jsx: {
-      parsedValue:
-        hasJsxRuntime && semver.gte(ts.version, '4.1.0-beta')
-          ? ts.JsxEmit.ReactJSX
-          : ts.JsxEmit.React,
-      value:
-        hasJsxRuntime && semver.gte(ts.version, '4.1.0-beta')
-          ? 'react-jsx'
-          : 'react',
-      reason: 'to support the new JSX transform in React 17',
+      parsedValue: ts.JsxEmit.React,
+      suggested: 'react',
     },
     paths: { value: undefined, reason: 'aliased imports are not supported' },
   };
@@ -228,9 +207,7 @@ function verifyTypeScriptSetup() {
 
     if (suggested != null) {
       if (parsedCompilerOptions[option] === undefined) {
-        appTsConfig = immer(appTsConfig, config => {
-          config.compilerOptions[option] = suggested;
-        });
+        appTsConfig.compilerOptions[option] = suggested;
         messages.push(
           `${coloredOption} to be ${chalk.bold(
             'suggested'
@@ -238,9 +215,7 @@ function verifyTypeScriptSetup() {
         );
       }
     } else if (parsedCompilerOptions[option] !== valueToCheck) {
-      appTsConfig = immer(appTsConfig, config => {
-        config.compilerOptions[option] = value;
-      });
+      appTsConfig.compilerOptions[option] = value;
       messages.push(
         `${coloredOption} ${chalk.bold(
           valueToCheck == null ? 'must not' : 'must'
@@ -252,9 +227,7 @@ function verifyTypeScriptSetup() {
 
   // tsconfig will have the merged "include" and "exclude" by this point
   if (parsedTsConfig.include == null) {
-    appTsConfig = immer(appTsConfig, config => {
-      config.include = ['src'];
-    });
+    appTsConfig.include = ['src'];
     messages.push(
       `${chalk.cyan('include')} should be ${chalk.cyan.bold('src')}`
     );
