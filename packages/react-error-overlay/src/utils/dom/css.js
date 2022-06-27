@@ -38,7 +38,7 @@ function removeCss(document: Document, ref: number) {
 function applyStyles(element: HTMLElement, styles: Object) {
   element.setAttribute('style', '');
   for (const key in styles) {
-    if (!Object.prototype.hasOwnProperty.call(styles, key)) {
+    if (!styles.hasOwnProperty(key)) {
       continue;
     }
     // $FlowFixMe

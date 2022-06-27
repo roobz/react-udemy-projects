@@ -8,25 +8,23 @@
 import { parse } from '../../utils/parser';
 
 test('throws on null', () => {
-  let error;
+  expect.assertions(2);
   try {
     parse(null);
   } catch (e) {
-    error = e;
+    expect(e instanceof Error).toBe(true);
+    expect(e.message).toBe('You cannot pass a null object.');
   }
-  expect(error instanceof Error).toBe(true);
-  expect(error.message).toBe('You cannot pass a null object.');
 });
 
 test('throws on unparsable', () => {
-  let error;
+  expect.assertions(2);
   try {
     parse({});
   } catch (e) {
-    error = e;
+    expect(e instanceof Error).toBe(true);
+    expect(e.message).toBe(
+      'The error you provided does not contain a stack trace.'
+    );
   }
-  expect(error instanceof Error).toBe(true);
-  expect(error.message).toBe(
-    'The error you provided does not contain a stack trace.'
-  );
 });

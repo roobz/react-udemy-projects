@@ -8,8 +8,10 @@
 /* @flow */
 
 import Anser from 'anser';
-import { encode } from 'html-entities';
+import { AllHtmlEntities as Entities } from 'html-entities';
 import type { Theme } from '../styles';
+
+const entities = new Entities();
 
 // Map ANSI colors from what babel-code-frame uses to base16-github
 // See: https://github.com/babel/babel/blob/e86f62b304d280d0bab52c38d61842b853848ba6/packages/babel-code-frame/src/index.js#L9-L22
@@ -43,7 +45,7 @@ const anserMap = {
 };
 
 function generateAnsiHTML(txt: string, theme: Theme): string {
-  const arr = new Anser().ansiToJson(encode(txt), {
+  const arr = new Anser().ansiToJson(entities.encode(txt), {
     use_classes: true,
   });
 
